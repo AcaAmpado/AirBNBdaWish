@@ -10,14 +10,6 @@ namespace AirBNBdaWish.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nome do Funcionario")]
-        public string NomeFuncionario { get; set; }
-
-        public string Email { get; set; }
-
-        public string Telemovel { get; set; }
-
-        public string Password { get; set; }
 
         public int GestorId { get; set; }
 
