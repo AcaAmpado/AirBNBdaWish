@@ -14,5 +14,8 @@ namespace AirBNBdaWish.Models
         public int GestorId { get; set; }
 
         public Gestor Gestor { get; set; }
+
+        public string UtilizadorId { get; set; }
+        public Utilizador Utilizador { get; set; }
     }
 }

@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using AirBNBdaWish.Data;
 
 namespace AirBNBdaWish.Areas.Identity.Pages.Account
 {
@@ -23,18 +25,21 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account
         private readonly SignInManager<Utilizador> _signInManager;
         private readonly UserManager<Utilizador> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<Utilizador> userManager,
             SignInManager<Utilizador> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -47,9 +52,18 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name = "GestorId")]
+            public int GestorId { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Telemovel")]
+            public string PhoneNumber { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -61,6 +75,11 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [DataType(DataType.Text)]
+            [Display(Name = "Tipo de Utilizador: ")]
+            [UIHint("List")]
+            public string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,10 +94,44 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new Utilizador { UserName = Input.Email, Email = Input.Email };
+                var user = new Utilizador { UserName = Input.Email, PhoneNumber = Input.PhoneNumber, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                var userAtual = await _userManager.GetUserAsync(User);
+               
                 if (result.Succeeded)
                 {
+                    if (Input.Role == "Cliente" || Input.Role == "Gestor" || Input.Role == "Admin" || Input.Role == "Funcionario") // Proteger do Inspect Element e Alterar o Valor antes de Submeter
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Tipo de Cliente Inválido!"+Input.Role);
+                        return Page();
+                    }
+
+                    if (Input.Role == "Cliente")
+                    {
+                        var cliente = new Cliente { };
+                        cliente.UtilizadorId = user.Id;
+                        _context.Add(cliente);
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (Input.Role == "Funcionario")
+                    {
+                        var gestorAt = _context.Gestor.Where(g => g.UtilizadorId == userAtual.Id).FirstOrDefault();
+                        var funcionario = new Funcionario { };
+                        funcionario.GestorId = gestorAt.Id;
+                        funcionario.UtilizadorId = user.Id;
+                        _context.Add(funcionario);
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (Input.Role == "Gestor")
+                    {
+                        var gestor = new Gestor { };
+                        gestor.UtilizadorId = user.Id;
+                        _context.Add(gestor);
+                        await _context.SaveChangesAsync();
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

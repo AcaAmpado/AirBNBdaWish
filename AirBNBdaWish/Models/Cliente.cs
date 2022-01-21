@@ -10,8 +10,7 @@ namespace AirBNBdaWish.Models
     {
         public int Id { get; set; }
 
-        [Display(Name="Data de Nascimento")]
-        public DateTime DataNascimento { get; set; }
-
+        public string UtilizadorId { get; set; }
+        public Utilizador Utilizador { get; set; }
     }
 }

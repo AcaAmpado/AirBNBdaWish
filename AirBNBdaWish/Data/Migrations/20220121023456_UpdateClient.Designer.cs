@@ -4,14 +4,16 @@ using AirBNBdaWish.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AirBNBdaWish.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220121023456_UpdateClient")]
+    partial class UpdateClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,12 +88,7 @@ namespace AirBNBdaWish.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UtilizadorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Cliente");
                 });
@@ -106,14 +103,9 @@ namespace AirBNBdaWish.Data.Migrations
                     b.Property<int>("GestorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UtilizadorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GestorId");
-
-                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Funcionario");
                 });
@@ -125,12 +117,7 @@ namespace AirBNBdaWish.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UtilizadorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Gestor");
                 });
@@ -159,9 +146,6 @@ namespace AirBNBdaWish.Data.Migrations
 
                     b.Property<int>("IdGestor")
                         .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Preco")
                         .HasColumnType("float");
@@ -433,15 +417,6 @@ namespace AirBNBdaWish.Data.Migrations
                     b.Navigation("Reserva");
                 });
 
-            modelBuilder.Entity("AirBNBdaWish.Models.Cliente", b =>
-                {
-                    b.HasOne("AirBNBdaWish.Models.Utilizador", "Utilizador")
-                        .WithMany()
-                        .HasForeignKey("UtilizadorId");
-
-                    b.Navigation("Utilizador");
-                });
-
             modelBuilder.Entity("AirBNBdaWish.Models.Funcionario", b =>
                 {
                     b.HasOne("AirBNBdaWish.Models.Gestor", "Gestor")
@@ -450,22 +425,7 @@ namespace AirBNBdaWish.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AirBNBdaWish.Models.Utilizador", "Utilizador")
-                        .WithMany()
-                        .HasForeignKey("UtilizadorId");
-
                     b.Navigation("Gestor");
-
-                    b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("AirBNBdaWish.Models.Gestor", b =>
-                {
-                    b.HasOne("AirBNBdaWish.Models.Utilizador", "Utilizador")
-                        .WithMany()
-                        .HasForeignKey("UtilizadorId");
-
-                    b.Navigation("Utilizador");
                 });
 
             modelBuilder.Entity("AirBNBdaWish.Models.Imovel", b =>

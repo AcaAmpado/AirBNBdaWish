@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,12 +10,18 @@ namespace AirBNBdaWish.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        [Display(Name = "Funcionário")]
         public int IdFuncionario { get; set; }
         public Funcionario Funcionario { get; set; }
-
+        
+        [Required]
+        [Display(Name = "Gestor")]
         public int IdGestor { get; set; }
         public Gestor Gestor { get; set; }
         
+        public String Nome { get; set; }
+
         public string Descricao { get; set; }
 
         // TODO imagens

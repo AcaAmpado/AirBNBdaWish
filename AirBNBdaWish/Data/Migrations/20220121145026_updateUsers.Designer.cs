@@ -4,14 +4,16 @@ using AirBNBdaWish.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AirBNBdaWish.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220121145026_updateUsers")]
+    partial class updateUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,6 +88,9 @@ namespace AirBNBdaWish.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("IdUtilizador")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UtilizadorId")
                         .HasColumnType("nvarchar(450)");
 
@@ -106,6 +111,9 @@ namespace AirBNBdaWish.Data.Migrations
                     b.Property<int>("GestorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("IdUtilizador")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UtilizadorId")
                         .HasColumnType("nvarchar(450)");
 
@@ -124,6 +132,9 @@ namespace AirBNBdaWish.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdUtilizador")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UtilizadorId")
                         .HasColumnType("nvarchar(450)");
@@ -159,9 +170,6 @@ namespace AirBNBdaWish.Data.Migrations
 
                     b.Property<int>("IdGestor")
                         .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Preco")
                         .HasColumnType("float");

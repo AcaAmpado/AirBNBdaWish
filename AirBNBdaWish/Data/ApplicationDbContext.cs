@@ -14,12 +14,12 @@ namespace AirBNBdaWish.Data
         {
         }
 
-        DbSet <Cliente> Cliente { get; set; }
-        DbSet<AvaliacaoCliente> AvaliacaoCliente { get; set; }
-        DbSet<AvaliacaoImovel> AvaliacaoImovel { get; set; }
-        DbSet<Funcionario> Funcionario { get; set; }
-        DbSet<Gestor> Gestor { get; set; }
-        DbSet<Imovel> Imovel { get; set; }
-        DbSet<Reserva> Reserva { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<AvaliacaoCliente> AvaliacaoCliente { get; set; }
+        public DbSet<AvaliacaoImovel> AvaliacaoImovel { get; set; }
+        public DbSet<Funcionario> Funcionario { get; set; }
+        public DbSet<Gestor> Gestor { get; set; }
+        public DbSet<Imovel> Imovel { get; set; }
+        public DbSet<Reserva> Reserva { get; set; }
     }
 }
