@@ -17,16 +17,23 @@ namespace AirBNBdaWish.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Utilizador> _userManager;
 
-        public ImovelsController(ApplicationDbContext context, UserManager<Utilizador> userManager )
+        public ImovelsController(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
+
         // GET: Imovels
         public async Task<IActionResult> Index()
-        {
-            return View(await _context.Imovel.ToListAsync());
+        {   
+            if (User.IsInRole("Gestor")) { 
+                var userAtual = await _userManager.GetUserAsync(User);
+                var gestorAt = _context.Gestor.Where(g => g.UtilizadorId == userAtual.Id).FirstOrDefault();
+                return View(await _context.Imovel.Include(f=>f.Gestor).Include(t=>t.Funcionario).Where(b => b.GestorId == gestorAt.Id).ToListAsync());
+            }
+            else
+                return View(await _context.Imovel.ToListAsync());
         }
 
         // GET: Imovels/Details/5
@@ -48,7 +55,7 @@ namespace AirBNBdaWish.Controllers
         }
 
 
-        [Authorize(Policy = "PoliticaParaGestores") ]
+        [Authorize(Policy = "PoliticaParaGestores")]
         // GET: Imovels/Create
         public IActionResult Create()
         {
@@ -61,11 +68,13 @@ namespace AirBNBdaWish.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdFuncionario,IdGestor,Descricao,Preco,Comodidades")] Imovel imovel)
+        public async Task<IActionResult> Create([Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Preco,Comodidades")] Imovel imovel)
         {
             if (ModelState.IsValid)
             {
-                //imovel.IdGestor = _userManager.GetUserId();
+                var userAtual = await _userManager.GetUserAsync(User);
+                var gestorAt = _context.Gestor.Where(g => g.UtilizadorId == userAtual.Id).FirstOrDefault();
+                imovel.GestorId = gestorAt.Id;
                 _context.Add(imovel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,7 +103,7 @@ namespace AirBNBdaWish.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdFuncionario,IdGestor,Descricao,Preco,Comodidades")] Imovel imovel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Preco,Comodidades")] Imovel imovel)
         {
             if (id != imovel.Id)
             {

@@ -9,7 +9,7 @@ namespace AirBNBdaWish.Models
     {
         public int Id { get; set; }
 
-        public int IdReserva { get; set; }
+        public int ReservaId { get; set; }
         public Reserva Reserva { get; set; }
 
         public int Classificacao { get; set; }

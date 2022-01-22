@@ -9,11 +9,11 @@ namespace AirBNBdaWish.Models
     {
         public int Id { get; set; }
 
-        public int IdImovel { get; set; }
+        public int ImovelId { get; set; }
 
         public Imovel Imovel { get; set; }
 
-        public int IdCliente { get; set; }
+        public int ClienteId { get; set; }
 
         public Cliente Cliente { get; set; }
 

@@ -12,12 +12,12 @@ namespace AirBNBdaWish.Models
 
         [Required]
         [Display(Name = "Funcionário")]
-        public int IdFuncionario { get; set; }
+        public int FuncionarioId { get; set; }
         public Funcionario Funcionario { get; set; }
         
         [Required]
         [Display(Name = "Gestor")]
-        public int IdGestor { get; set; }
+        public int GestorId { get; set; }
         public Gestor Gestor { get; set; }
         
         public String Nome { get; set; }
