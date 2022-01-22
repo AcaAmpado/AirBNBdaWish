@@ -103,6 +103,15 @@ namespace AirBNBdaWish.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var funcionario = await _context.Funcionario.FindAsync(id);
+            List<Imovel> listaImoveis = new List<Imovel>(_context.Imovel.Where(g => g.FuncionarioId == funcionario.Id));
+            foreach(Imovel im in listaImoveis){
+                List<Reserva> reservas = new List<Reserva>(_context.Reserva.Where(g => g.ImovelId == im.Id));
+                foreach(Reserva re in reservas)
+                {
+                    _context.Reserva.Remove(re);
+                }
+                _context.Imovel.Remove(im);
+            }
             var utilizador = await _context.Users.FindAsync(funcionario.UtilizadorId);
             _context.Users.Remove(utilizador);
             _context.Funcionario.Remove(funcionario);
