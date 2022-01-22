@@ -1,4 +1,4 @@
-﻿    @model AirBNBdaWish.Models.Imovel
+﻿@model AirBNBdaWish.Models.Imovel
 
 @{
     ViewData["Title"] = "Details";
@@ -26,7 +26,7 @@
             @Html.DisplayNameFor(model => model.GestorId)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GestorId)
+            @Html.DisplayFor(model => model.GestorId) <!-- Devia trocar para o nome deixar de mostrar ids-->
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Descricao)
@@ -35,7 +35,37 @@
             @Html.DisplayFor(model => model.Descricao)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Preco)
+            @Html.DisplayNameFor(model => model.Cidade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cidade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rua)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rua)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CodigoPostal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CodigoPostal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Localidade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Localidade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Porta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Porta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Preco)<span> (€)</span>
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Preco)
@@ -49,6 +79,26 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole("Gestor"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><span> |</span>
+        <a asp-action="Index">Back to List</a><span> |</span>
+        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    }
+    else if (User.IsInRole("Funcionario"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Reservas</a><span> |</span>
+        <a asp-action="Index">Back to List</a><span> |</span>
+        <a asp-action="Delete">CheckList-Entrega</a><span> |</span>
+        <a asp-action="Delete">CheckList-Receber</a>
+    }
+    else if (User.IsInRole("Cliente"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Reservar</a><span> |</span>
+        <a asp-action="Index">Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
 </div>

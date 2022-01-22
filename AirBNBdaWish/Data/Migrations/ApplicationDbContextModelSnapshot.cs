@@ -133,6 +133,12 @@ namespace AirBNBdaWish.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Cidade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodigoPostal")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Comodidades")
                         .HasColumnType("nvarchar(max)");
 
@@ -145,11 +151,20 @@ namespace AirBNBdaWish.Data.Migrations
                     b.Property<int>("GestorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Localidade")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Porta")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Preco")
                         .HasColumnType("float");
+
+                    b.Property<string>("Rua")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -59,7 +59,9 @@ namespace AirBNBdaWish.Controllers
         // GET: Imovels/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "Id", "Id", _context.Funcionario);
+            var userAtual = _userManager.GetUserId(User);
+            var gestorAt = _context.Gestor.Where(g => g.UtilizadorId == userAtual).FirstOrDefault();
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario.Include(f=>f.Gestor).Where(t=>t.GestorId == gestorAt.Id), "Id", "Id", _context.Funcionario.Include(f => f.Gestor).Where(t => t.GestorId == gestorAt.Id));
             return View();
         }
 
@@ -68,7 +70,7 @@ namespace AirBNBdaWish.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Preco,Comodidades")] Imovel imovel)
+        public async Task<IActionResult> Create([Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Cidade,Rua,CodigoPostal,Localidade,Porta,Preco,Comodidades")] Imovel imovel)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +91,7 @@ namespace AirBNBdaWish.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionario, "Id", "Id", _context.Funcionario);
             var imovel = await _context.Imovel.FindAsync(id);
             if (imovel == null)
             {
@@ -103,7 +105,7 @@ namespace AirBNBdaWish.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Preco,Comodidades")] Imovel imovel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FuncionarioId,GestorId,Nome,Descricao,Cidade,Rua,CodigoPostal,Localidade,Porta,Preco,Comodidades")] Imovel imovel)
         {
             if (id != imovel.Id)
             {
@@ -114,6 +116,9 @@ namespace AirBNBdaWish.Controllers
             {
                 try
                 {
+                    var userAtual = await _userManager.GetUserAsync(User);
+                    var gestorAt = _context.Gestor.Where(g => g.UtilizadorId == userAtual.Id).FirstOrDefault();
+                    imovel.GestorId = gestorAt.Id;
                     _context.Update(imovel);
                     await _context.SaveChangesAsync();
                 }

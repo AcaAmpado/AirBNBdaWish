@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="wwwroot\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
     <Compile Remove="Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml.cs" />
   </ItemGroup>
@@ -13,6 +20,7 @@
   <ItemGroup>
     <Content Remove="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
     <Content Remove="Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml" />
+    <Content Remove="Views\Funcionarios\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
