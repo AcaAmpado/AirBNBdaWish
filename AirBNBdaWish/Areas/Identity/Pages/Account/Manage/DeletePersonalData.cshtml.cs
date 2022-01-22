@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using AirBNBdaWish.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AirBNBdaWish.Areas.Identity.Pages.Account.Manage
 {
@@ -14,15 +17,18 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Utilizador> _userManager;
         private readonly SignInManager<Utilizador> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public DeletePersonalDataModel(
             UserManager<Utilizador> userManager,
             SignInManager<Utilizador> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -67,7 +73,24 @@ namespace AirBNBdaWish.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (User.IsInRole("Funcionario"))
+            {
+                var funcionario = _context.Funcionario.Where(g => g.UtilizadorId == user.Id).FirstOrDefault();
+                List<Imovel> listaImoveis = new List<Imovel>(_context.Imovel.Where(g => g.FuncionarioId == funcionario.Id));
+                foreach (Imovel im in listaImoveis)
+                {
+                    List<Reserva> reservas = new List<Reserva>(_context.Reserva.Where(g => g.ImovelId == im.Id));
+                    foreach (Reserva re in reservas)
+                    {
+                        _context.Reserva.Remove(re);
+                    }
+                    _context.Imovel.Remove(im);
+                }
+                _context.Funcionario.Remove(funcionario);
+                await _context.SaveChangesAsync();
+            }
             var result = await _userManager.DeleteAsync(user);
+            
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {

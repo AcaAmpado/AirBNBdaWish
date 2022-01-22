@@ -168,7 +168,7 @@ else if (User.IsInRole("Cliente"))
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a><span> |</span>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Reservar</a>
+                    <a asp-controller="Reservas" asp-action="Create" asp-route-id="@item.Id">Reservar</a>
                 </td>
             </tr>
             }
@@ -248,7 +248,7 @@ else if (User.IsInRole("Funcionario"))
                     @Html.DisplayFor(modelItem => item.Comodidades)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Reservas</a>
+                    <a asp-controller="Reservas" asp-action="Index">Reservas</a>
                 </td>
             </tr>
             }
