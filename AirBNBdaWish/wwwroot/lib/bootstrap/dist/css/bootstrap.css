@@ -198,6 +198,7 @@ figure {
 img {
   vertical-align: middle;
   border-style: none;
+  width: 100%;
 }
 
 svg {
@@ -6588,7 +6589,7 @@ button.bg-dark:focus {
 }
 
 .bg-white {
-  background-color: #fff !important;
+    background-color: #00A7B3 !important;
 }
 
 .bg-transparent {
